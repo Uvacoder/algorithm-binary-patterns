@@ -16,7 +16,7 @@ function getBitmask(binary) {
  * Discover patterns in an array of binary.
  * @param {Array} data 
  */
-function getPatterns(data,debug=false) {
+function getPatterns(data,preview=false) {
 
     let size = data.length;
     let patterns = [];
@@ -37,9 +37,14 @@ function getPatterns(data,debug=false) {
                 count++;
             } else {
                 if(count > 2) {
-                    const index = (i-count)*chunk;
-                    const slice = data.slice(index,index+(count*chunk));
-                    patterns.push({chunk,count,index,slice});
+                    let pattern = {
+                        start       : (i-count)*chunk,
+                        size        : chunk,
+                        repetitions : count
+                    };
+                    if(preview)
+                        pattern['preview'] = data.slice(pattern.start,pattern.start+(count*chunk));
+                    patterns.push(pattern);
                 }
                 count = 1;
             }
